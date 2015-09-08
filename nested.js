@@ -2,7 +2,13 @@ var http = require('http');
 
 var get = function(arr, data, callback) {
   http.get(arr[0]['href'], function(resp) {
-    data[arr[0]['name']] = resp;
+    if (data[arr[0]]['merge'] === false) {
+        data[arr[0]['name']] = resp;
+    } else {
+        Object.keys(resp).forEach(function(key) {
+            data[arr[0]][key] = resp[key];
+        });
+    }
     arr.splice(0, 1);
     if (arr.length === 0) {
       callback(data);
@@ -35,4 +41,3 @@ module.exports = {
   test_get: test_get
 };
 
-    
